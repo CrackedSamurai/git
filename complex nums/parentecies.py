@@ -9,7 +9,7 @@ class parentheses:
         self.__is_num()
     #checks if its a valid number
     def __is_num(self):
-        if isinstance([self.number, self.comlx], (int, float)):
+        if isinstance(self.number, (int, float)):
             pass
         else:
             raise ValueError("is not num")
