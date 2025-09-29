@@ -1,42 +1,44 @@
+from parentecies import parentheses
 class complex:
     def __init__(self, value):
         self.value = value
         self.__is_num()
-
+    #checks if its a valid number
     def __is_num(self):
         if isinstance(self.value, (int, float)):
             pass
         else:
-            raise ValueError("is not num")
-        
+            print(self.value)
+            #raise ValueError("is not num")
+    #returns a string version of the number    
     def __str__(self):
         return f"{self.value}i"
-    
+    #returns its value
     def return_i(self):
         return self.value
-    
+    #addition
     def __add__(self, other):
         if isinstance(other, complex):
             return complex(self.value + other.value)
         else:
-            return f"{self} + {other}"
+            return parentheses(other, self.value)
     def __radd__(self, other):
-        return f"{other} + {self}"
-        
+        return parentheses(other, self.value)
+    #subtraction    
     def __sub__(self, other):
         if isinstance(other, complex):
             return complex(self.value - other.value)
         else:
-            return f"{self} - {other}"
+            return parentheses(other, self.value)
     def __rsub__(self, other):
-        return f"{other} - {self}"
-        
+        return parentheses(other, self.value)
+    #multiplication    
     def __mul__(self, other):
         if isinstance(other, complex):
             return -(self.value * other.value)
         else:
             return complex(self.value * other)
-        
+    #division    
     def __truediv__(self, other):
         if isinstance(other, complex):
             return (self.value / other.value)
@@ -47,7 +49,7 @@ class complex:
             return(other.value / self.value)
         else:
             return complex(other / self.value)
-        
+    #power    
     def __pow__(self, other):
         if isinstance(other, complex):
             raise ValueError("not yet built in function: complex ** complex")
@@ -62,9 +64,9 @@ class complex:
                     return complex(self.value)
                 else: 
                     return complex(-self.value)
-                
+    #floor            
     def __floordiv__(self, other):
         return 1/self.value**other
 
-equasion = 4 + complex(5) ** 9 * (6 - complex(3) - 4 * 4)
+equasion = 4 + complex(5) * (6 - complex(3) - 4 * 4)
 print(equasion)
