@@ -1,16 +1,14 @@
 class complex:
     def __init__(self, value):
-        self.value = value
-        self.__is_num()
-    #checks if its a valid number
-    def __is_num(self):
-        if isinstance(self.value, (int, float)):
-            pass
-        else:
+        if not isinstance(value, (int, float)):
             raise ValueError("is not num")
+        self.value = value
+
+        
     #returns a string version of the number    
     def __str__(self):
         return f"{self.value}i"
+    
     #+
     def __add__(self, other):
         if isinstance(other, parentheses):
@@ -19,10 +17,8 @@ class complex:
             return complex(self.value + other.value)
         else:
             return parentheses(other, self)
-    def __radd__(self, other):
-        if isinstance(other, parentheses):
-            return NotImplemented
-        return parentheses(other, self)
+    __radd__ = __add__
+
     #-    
     def __sub__(self, other):
         if isinstance(other, parentheses):
@@ -30,13 +26,15 @@ class complex:
         elif isinstance(other, complex):
             return complex(self.value - other.value)
         else:
-            return parentheses(other, self)
+            return parentheses(-other, self)
     def __rsub__(self, other):
         if isinstance(other, parentheses):
             return NotImplemented
         elif isinstance(other, complex):
             return complex(other.value - self.value)
+        self.value = -self.value
         return parentheses(other, self)
+    
     #*    
     def __mul__(self, other):
         if isinstance(other, parentheses):
@@ -45,13 +43,8 @@ class complex:
             return -(self.value * other.value)
         else:
             return complex(self.value * other)
-    def __rmul__(self, other):
-        if isinstance(other, parentheses):
-            return NotImplemented
-        elif isinstance(other, complex):
-            return -(self.value * other.value)
-        else:
-            return complex(self.value * other)
+    __rmul__ = __mul__
+
     #/  
     def __truediv__(self, other):
         if isinstance(other, parentheses):
@@ -67,6 +60,7 @@ class complex:
             return(other.value / self.value)
         else:
             return complex(other / self.value)
+        
     #**    
     def __pow__(self, other):
         if isinstance(other, complex):
@@ -82,49 +76,55 @@ class complex:
                     return complex(self.value)
                 else: 
                     return complex(-self.value)
+                
     #//            
     def __floordiv__(self, other):
         return 1/self.value**other
+    
+    #comparisons
     #==
-    def __eq__(self, other):
-        return self.value == other
+    def __eq__(self, other): return self.value == other
     #<
-    def __lt__(self, other):
-        return self.value < other
+    def __lt__(self, other): return self.value < other
     #<=
-    def __le__(self, other):
-        return self.value <= other
+    def __le__(self, other): return self.value <= other
     #>
-    def __gt__(self, other):
-        return self.value > other
+    def __gt__(self, other): return self.value > other
     #>=
-    def __ge__(self, other):
-        return self.value >= other
+    def __ge__(self, other): return self.value >= other
+
+    #abs
+    def __abs__(self):
+        self.value = abs(self.value)
+        return self
+    
+    #neg
+    def __neg__(self):
+        self.value = -self.value
+        return self
+
 
 
 
 class parentheses:
     def __init__(self, value_1, value_2):
+        if not isinstance(value_1, (int, float, complex, parentheses)) and isinstance(value_2, (int, float, complex, parentheses)):
+            raise ValueError("is not num")
         if  isinstance(value_1, complex):
             self.number = value_2
             self.comlx = value_1
         else:
             self.number = value_1
             self.comlx = value_2
-        self.__is_num()
         self.__can_sum()
-    #checks if its a valid number
-    def __is_num(self):
-        if isinstance(self.number, (int, float, complex, parentheses)) and isinstance(self.comlx, (int, float, complex, parentheses)):
-            pass
-        else:
-            raise ValueError("is not num")
+
     #can sum
     def __can_sum(self):
         if isinstance([self.number, self.comlx], (int, float,)):
             return self.number + self.comlx
         elif isinstance([self.number, self.comlx], complex):
             return self.number + self.comlx
+        
     #returns a string version of the parentheses
     def __str__(self):
         if self.number == 0:
@@ -135,6 +135,7 @@ class parentheses:
             return f"({self.number}+{self.comlx})"
         else:
             return f"({self.number}-{abs(self.comlx)})"
+        
     #+
     def __add__(self, other):
         if isinstance(other, parentheses):
@@ -143,13 +144,8 @@ class parentheses:
             return parentheses(self.number, self.comlx + other)
         else:
             return parentheses(self.number + other, self.comlx)
-    def __radd__(self, other):
-        if isinstance(other, parentheses):
-            return parentheses(self.number + other.number, self.comlx + other.comlx)
-        elif isinstance(other, complex):
-            return parentheses(self.number, self.comlx + other)
-        else:
-            return parentheses(self.number + other, self.comlx)
+    __radd__ = __add__
+    
     #-    
     def __sub__(self, other):
         if isinstance(other, parentheses):
@@ -165,17 +161,15 @@ class parentheses:
             return parentheses(self.number, other - self.comlx)
         else:
             return parentheses(other - self.number, self.comlx)
+        
     #*    
     def __mul__(self, other):
         if isinstance(other, parentheses):
             return parentheses(self.number * other.number, self.comlx * other.number) + parentheses(self.number * other.comlx, self.comlx * other.comlx)
         else:
             return parentheses(self.number * other, self.comlx * other)
-    def __rmul__(self, other):
-        if isinstance(other, parentheses):
-            return parentheses(self.number * other.number, self.comlx * other.number) + parentheses(self.number * other.comlx, self.comlx * other.comlx)
-        else:
-            return parentheses(self.number * other, self.comlx * other)
+    __rmul__ = __mul__
+
     #/    
     def __truediv__(self, other):
         if isinstance(other, parentheses):
@@ -186,6 +180,5 @@ class parentheses:
         return f"{other}/{self}"
 
 
-equasion = (4 + complex(5) - complex(4) + 5 ) * (complex(1) + 5)
-equasion = 2 / (4 + complex(5) - complex(4) + 5 ) * (complex(1) + 5)
+equasion = (4 + complex(5) - complex(4) + 5 ) * (complex(1) + 5) / (complex(9) - 7 + complex(4) * 0.5)
 print(equasion)
