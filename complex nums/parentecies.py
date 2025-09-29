@@ -6,28 +6,32 @@ class parentheses:
         else:
             self.number = value_1
             self.comlx = value_2
-        self.__is_num()
+        #self.__is_num()
     #checks if its a valid number
     def __is_num(self):
-        if isinstance(self.number, (int, float)):
+        if isinstance([self.number, self.comlx], (int, float, complex)):
             pass
         else:
             raise ValueError("is not num")
-    #check if nums are in order
-    def __in_order(self):
+    #returns a string version of the parentheses
+    def __str__(self):
         if self.number > 0:
             pass
         else:
             self.number, self.comlx = self.comlx, self.number
-    #returns a string version of the parentheses
-    def __str__(self):
-        self.__in_order()
         if self.comlx >= 0:
-            return f"({self.number}+{self.comlx})"
+            return f"({self.number}+{self.comlx}i)"
         else:
-            return f"({self.number}-{abs(self.comlx)})"
+            return f"({self.number}-{abs(self.comlx)}i)"
     #addition
     def __add__(self, other):
+        if isinstance(other, parentheses):
+            return parentheses(self.number + other.number, self.comlx + other.comlx)
+        elif isinstance(other, complex):
+            return parentheses(self.number, self.comlx + other)
+        else:
+            return parentheses(self.number + other, self.comlx)
+    def __radd__(self, other):
         if isinstance(other, parentheses):
             return parentheses(self.number + other.number, self.comlx + other.comlx)
         elif isinstance(other, complex):
@@ -50,7 +54,12 @@ class parentheses:
         else:
             return parentheses(other - self.number, self.comlx)
     #multiplication    
-    def __mul__(self, other):
+    def __rmul__(self, other):
+        if isinstance(other, parentheses):
+            return parentheses(parentheses(self.number * other.number, self.comlx * other.number) + parentheses(self.number * other.comlx, self.comlx * other.comlx))
+        else:
+            return parentheses(self.number * other, self.comlx * other)
+    def __rmul__(self, other):
         if isinstance(other, parentheses):
             return parentheses(parentheses(self.number * other.number, self.comlx * other.number) + parentheses(self.number * other.comlx, self.comlx * other.comlx))
         else:

@@ -8,8 +8,7 @@ class complex:
         if isinstance(self.value, (int, float)):
             pass
         else:
-            print(self.value)
-            #raise ValueError("is not num")
+            raise ValueError("is not num")
     #returns a string version of the number    
     def __str__(self):
         return f"{self.value}i"
@@ -18,34 +17,55 @@ class complex:
         return self.value
     #addition
     def __add__(self, other):
-        if isinstance(other, complex):
+        if isinstance(other, parentheses):
+            return NotImplemented
+        elif isinstance(other, complex):
             return complex(self.value + other.value)
         else:
             return parentheses(other, self.value)
     def __radd__(self, other):
+        if isinstance(other, parentheses):
+            return NotImplemented
         return parentheses(other, self.value)
     #subtraction    
     def __sub__(self, other):
-        if isinstance(other, complex):
+        if isinstance(other, parentheses):
+            return NotImplemented
+        elif isinstance(other, complex):
             return complex(self.value - other.value)
         else:
             return parentheses(other, self.value)
     def __rsub__(self, other):
+        if isinstance(other, parentheses):
+            return NotImplemented
         return parentheses(other, self.value)
     #multiplication    
     def __mul__(self, other):
-        if isinstance(other, complex):
+        if isinstance(other, parentheses):
+            return NotImplemented
+        elif isinstance(other, complex):
+            return -(self.value * other.value)
+        else:
+            return complex(self.value * other)
+    def __rmul__(self, other):
+        if isinstance(other, parentheses):
+            return NotImplemented
+        elif isinstance(other, complex):
             return -(self.value * other.value)
         else:
             return complex(self.value * other)
     #division    
     def __truediv__(self, other):
-        if isinstance(other, complex):
+        if isinstance(other, parentheses):
+            return NotImplemented
+        elif isinstance(other, complex):
             return (self.value / other.value)
         else:
             return complex(self.value / other)
     def __rtruediv__(self, other):
-        if isinstance(other, complex):
+        if isinstance(other, parentheses):
+            return NotImplemented
+        elif isinstance(other, complex):
             return(other.value / self.value)
         else:
             return complex(other / self.value)
