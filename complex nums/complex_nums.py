@@ -181,5 +181,5 @@ class parentheses:
         denominator = self * parentheses(self.real, -self.imaginary).__can_sum()
         return numerator / denominator
 
-equasion = parentheses(20, complex(15)) / parentheses(10, complex(5)) * 5 + parentheses(2, complex(3)) - 4**2   
+equasion = parentheses(20, complex(15)) / parentheses(10, complex(5)) * 5 + parentheses(2, complex(3)) - 4**2 -parentheses(1, complex(1)) 
 print(equasion, type(equasion))
