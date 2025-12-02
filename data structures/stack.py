@@ -1,42 +1,36 @@
+import random
+
 class stack:
     def __init__(self):
-        self.data = [None]*10
-        self.slots = len(self.data)
-        self.used_slots = 0
+        self.top = None
 
     def push(self, value):
-        if self.__free_space():
-            self.data[self.used_slots] = value
-        else:
-            self.__resize()
-            self.data[self.used_slots] = value
-        self.used_slots += 1
-        self.slots = len(self.data)
+        new_item = item(value)
+        new_item.next = self.top
+        self.top = new_item
         return self
 
     def pop(self):
-        
-        self.slots = len(self.data)
-    def peek(self, index):
-        return self.data[index]
+        item = self.top
+        self.top = self.top.next
+        return item.value
+
+    def peek(self):
+        return self.top
+
+    def is_empty(self):
+        return self.top is None
     
-    def __free_space(self):
-        if self.used_slots >= self.slots:
-            return False
-        return True
-    def __resize(self):
-        new_data = [None]*(self.slots*2)
-        for i in range(self.used_slots):
-            new_data[i] = self.data[i]
-        self.data = new_data
-        self.slots = len(self.data)
-        return self
-    def __len__(self):
-        return len(self.data)
     def __repr__(self):
-        if self.used_slots == 0:
-            return "magazine: empty"
-        return f"magazine:{self.data}, slots{self.slots}, used_slots:{self.used_slots}"
+        if self.is_empty():
+            return "stack: empty"
+        current = self.top
+        values = []
+        while current:
+            values.append(current.value)
+            current = current.next
+        return "stack: " + " -> ".join(map(str, values))
+
 
 class item:
     def __init__(self, value):    
@@ -46,9 +40,10 @@ class item:
         return f"item:{self.value}"
 
 stk = stack()
-stk.push("first")
-stk.push("second")
-stk.push("third")
-stk.pop()
-print(stk.peek(0))
+for i in range(10):
+    i = random.randint(1,20)
+    stk.push(i)
+print(stk)
+print(stk.pop())
+print(stk.peek())
 print(stk)
