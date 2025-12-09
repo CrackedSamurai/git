@@ -38,13 +38,13 @@ class queue():
 
     def __repr__(self):
         if self.is_empty():
-            return "stack: empty"
+            return "queue: empty"
         current = self.first
         values = []
         while current:
             values.append(current.value)
             current = current.next
-        return "stack: " + " -> ".join(map(str, values))
+        return "queue: " + " -> ".join(map(str, values))
     
 class item():
     def __init__(self, value, next=None):
