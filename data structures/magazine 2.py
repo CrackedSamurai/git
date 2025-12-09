@@ -1,12 +1,11 @@
 import random
 
-class stack:
+class magazine:
     def __init__(self):
         self.top = None
 
     def push(self, value):
-        new_item = item(value)
-        new_item.next = self.top
+        new_item = item(value, self.top)
         self.top = new_item
         return self
 
@@ -33,13 +32,13 @@ class stack:
 
 
 class item:
-    def __init__(self, value):    
+    def __init__(self, value, next=None):    
         self.value = value
-        self.next = None
+        self.next = next
     def __repr__(self):
         return f"item:{self.value}"
 
-stk = stack()
+stk = magazine()
 for i in range(10):
     i = random.randint(1,20)
     stk.push(i)
